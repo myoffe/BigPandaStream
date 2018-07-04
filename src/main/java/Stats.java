@@ -19,11 +19,11 @@ public class Stats {
         incrementOccurrence(words, word);
     }
 
-    private void incrementOccurrence(Map<String, Integer> map, String word) {
-        if (!map.containsKey(word)) {
-            map.put(word, 0);
+    private void incrementOccurrence(Map<String, Integer> map, String str) {
+        if (!map.containsKey(str)) {
+            map.put(str, 0);
         }
-        map.put(word, map.get(word) + 1);
+        map.put(str, map.get(str) + 1);
     }
 
     private String[] splitToWords(String s) {
