@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 
 public class Consumer {
 
+    private final Gson gson = new Gson();
     private Stats stats;
 
     public Consumer(Stats stats) {
@@ -20,12 +21,11 @@ public class Consumer {
     }
 
     private void consume(String line) {
-        Gson gson = new Gson();
         try {
             Event event = gson.fromJson(line, Event.class);
-
+            stats.addEvent(event);
         } catch (JsonParseException e) {
-            // Ignoring event
+            // Ignore bad data
         }
     }
 }
