@@ -6,13 +6,17 @@ import java.util.stream.Collectors;
 import static spark.Spark.get;
 
 public class Main {
-    private static Stats stats = new Stats();
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        Stats stats = new Stats();
+
         get("/events", (req, res) -> formattedStats(stats.getEventTypes()));
         get("/words", (req, res) -> formattedStats(stats.getWords()));
 
-        new Consumer(stats).run();
+        for (int i = 0; i < 10; i++) {
+            (new Thread(new Consumer(stats))).start();
+        }
+
     }
 
     private static String formattedStats(Map<String, LongAdder> counter) {
