@@ -19,24 +19,28 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Starting consumer " + Thread.currentThread());
+        log("Starting consumer");
         try {
             Process generatorProcess = Runtime.getRuntime().exec("./generator-macosx-amd64");
             BufferedReader reader = new BufferedReader(new InputStreamReader(generatorProcess.getInputStream()));
             reader.lines().forEach(this::consume);
         } catch (IOException e) {
-            System.out.println(format("Error in consumer thread: %s\n%s", Thread.currentThread(), e));
+            log("Error in consumer: " + e);
         }
 
     }
     private void consume(String line) {
-        System.out.println(format("Thread %s consuming line: %s", Thread.currentThread(), line));
+        log("consuming line: " + line);
         try {
             Event event = gson.fromJson(line, Event.class);
             stats.addEvent(event);
         } catch (JsonParseException e) {
             // Ignore bad data
         }
+    }
+
+    private void log(String msg) {
+        System.out.println(format("%s %s", Thread.currentThread(), msg));
     }
 
 }
