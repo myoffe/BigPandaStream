@@ -3,6 +3,7 @@ import com.google.gson.JsonParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import static java.lang.String.format;
@@ -10,25 +11,24 @@ import static java.lang.String.format;
 public class Consumer implements Runnable {
 
     private final Gson gson = new Gson();
-    private Stats stats;
 
-    public Consumer(Stats stats) {
+    private Stats stats;
+    private InputStream inputStream;
+
+    public Consumer(Stats stats, InputStream inputStream) {
         this.stats = stats;
+        this.inputStream = inputStream;
     }
 
 
     @Override
     public void run() {
         log("Starting consumer");
-        try {
-            Process generatorProcess = Runtime.getRuntime().exec("./generator-macosx-amd64");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(generatorProcess.getInputStream()));
-            reader.lines().forEach(this::consume);
-        } catch (IOException e) {
-            log("Error in consumer: " + e);
-        }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        reader.lines().forEach(this::consume);
 
     }
+
     private void consume(String line) {
         log("consuming line: " + line);
         try {
