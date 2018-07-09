@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
 import static spark.Spark.get;
@@ -14,7 +15,7 @@ public class Main {
         new Consumer(stats).run();
     }
 
-    private static String formattedStats(Map<String, Integer> counter) {
+    private static String formattedStats(Map<String, LongAdder> counter) {
         List<String> lines = counter.entrySet().stream()
                 .map(entry -> entry.getKey() + ": " + entry.getValue())
                 .collect(Collectors.toList());

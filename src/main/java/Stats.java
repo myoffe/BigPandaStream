@@ -1,11 +1,11 @@
 import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.LongAdder;
 
 public class Stats {
-    private ConcurrentMap<String, LongAdder> eventTypes = new ConcurrentHashMap<>();
-    private ConcurrentMap<String, LongAdder> words = new ConcurrentHashMap<>();
+    private Map<String, LongAdder> eventTypes = new ConcurrentHashMap<>();
+    private Map<String, LongAdder> words = new ConcurrentHashMap<>();
 
     public void addEvent(Event event) {
         incrementEventTypeOccurrences(event.getEventType());
@@ -20,7 +20,7 @@ public class Stats {
         incrementOccurrence(words, word);
     }
 
-    private void incrementOccurrence(ConcurrentMap<String, LongAdder> map, String str) {
+    private void incrementOccurrence(Map<String, LongAdder> map, String str) {
         map.computeIfAbsent(str, k -> new LongAdder()).increment();
     }
 
@@ -28,11 +28,11 @@ public class Stats {
         return s.replaceAll("[^a-zA-Z]", " ").toLowerCase().split("\\s");
     }
 
-    public ConcurrentMap<String, LongAdder> getEventTypes() {
+    public Map<String, LongAdder> getEventTypes() {
         return eventTypes;
     }
 
-    public ConcurrentMap<String, LongAdder> getWords() {
+    public Map<String, LongAdder> getWords() {
         return words;
     }
 }
