@@ -8,6 +8,8 @@ public class Stats {
     private Map<String, LongAdder> words = new ConcurrentHashMap<>();
 
     public void addEvent(Event event) {
+        if (event == null) return;
+
         incrementEventTypeOccurrences(event.getEventType());
         Arrays.asList(splitToWords(event.getData())).forEach(this::incrementWordOccurrences);
     }
